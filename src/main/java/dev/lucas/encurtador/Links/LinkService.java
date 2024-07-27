@@ -2,17 +2,15 @@ package dev.lucas.encurtador.Links;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.View;
 
 import java.time.LocalDateTime;
 
 @Service
 public class LinkService {
-    private final View error;
     private LinkRepository linkRepository;
-    public LinkService(LinkRepository linkRepository, View error) {
+
+    public LinkService(LinkRepository linkRepository) {
         this.linkRepository = linkRepository;
-        this.error = error;
     }
 
     //IDEIA: UTILIZAR PARTE DO LINK ORIGINAL NA CRIAÇÃO DO NOVO LINK
@@ -30,9 +28,9 @@ public class LinkService {
         return linkRepository.save(link);
     }
 
-    public Link obterUrlOriginal(String urlEncurtada) {
+    public Link obterUrlOriginal(String urlNova) {
         try {
-            return linkRepository.findByUrlOriginal(urlEncurtada);
+            return linkRepository.findByUrlOriginal(urlNova);
         }catch(Exception erro){
             throw new RuntimeException("URL não encontrado", erro);
         }
