@@ -1,12 +1,13 @@
 package dev.lucas.encurtador.Links;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
@@ -33,5 +34,15 @@ public class LinkController {
                 createdAtString
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(linkResponse);
+    }
+
+    @GetMapping("/r/{urlCurta}")
+    public void redirecionaLink(@PathVariable String urlCurta, HttpServletResponse response) throws IOException {
+        Link link = linkService.obterUrlOriginal(urlCurta);
+        if (link != null){
+            response.sendRedirect(link.getUrlOriginal());
+        }else{
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 }
