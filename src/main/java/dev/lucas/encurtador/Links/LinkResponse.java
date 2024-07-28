@@ -1,6 +1,5 @@
 package dev.lucas.encurtador.Links;
 
-import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

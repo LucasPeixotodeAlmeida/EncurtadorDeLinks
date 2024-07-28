@@ -30,7 +30,7 @@ public class LinkService {
 
     public Link obterUrlOriginal(String urlNova) {
         try {
-            return linkRepository.findByUrlOriginal(urlNova);
+            return linkRepository.findByUrlNova(urlNova);
         }catch(Exception erro){
             throw new RuntimeException("URL não encontrado", erro);
         }
