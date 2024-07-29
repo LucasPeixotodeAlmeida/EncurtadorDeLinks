@@ -24,6 +24,8 @@ public class Link {
 
     private String urlOriginal;
     private String urlNova;
+
+    @Column(length = 2048)
     private String urlQrCode;
 
     @Timestamp
