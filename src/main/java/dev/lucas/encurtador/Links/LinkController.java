@@ -18,21 +18,28 @@ public class LinkController {
 
     @PostMapping("/encurta")
     public ResponseEntity<LinkResponse> gerarUrlEncurtada(@RequestBody Map<String, String> request) {
-        String urlOriginal = request.get("urlOriginal");
-        Link link = linkService.encurtarUrl(urlOriginal);
+        try {
+            String urlOriginal = request.get("urlOriginal");
+            // Chama o serviço para encurtar a URL e gerar o QR code
+            Link link = linkService.encurtarUrl(urlOriginal);
 
-        String gerarUrldeRedirecionamentoDoUsuario = "http://localhost:8090/r/" + link.getUrlNova();
+            // Gera a URL de redirecionamento para o usuário
+            String gerarUrldeRedirecionamentoDoUsuario = "http://localhost:8090/r/" + link.getUrlNova();
 
-        String createdAtString = link.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-
-        LinkResponse linkResponse = new LinkResponse(
-                link.getId(),
-                link.getUrlOriginal(),
-                gerarUrldeRedirecionamentoDoUsuario,
-                link.getUrlQrCode(),
-                createdAtString
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(linkResponse);
+            // Cria a resposta com os detalhes do link e do QR code
+            LinkResponse linkResponse = new LinkResponse(
+                    link.getId(),
+                    link.getUrlOriginal(),
+                    gerarUrldeRedirecionamentoDoUsuario,
+                    link.getUrlQrCode(),
+                    link.getCreatedAt().toString()
+            );
+            // Retorna a resposta com status 201 (Created)
+            return ResponseEntity.status(HttpStatus.CREATED).body(linkResponse);
+        } catch (Exception e) {
+            // Em caso de erro, retorna uma resposta com status 500 (Internal Server Error)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @GetMapping("/r/{urlCurta}")
